@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup Guide — OctoTasks</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <span class="navbar-brand">
+      <svg width="20" height="20" viewBox="0 0 16 16">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      OctoTasks
+    </span>
+    <nav class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="api.html">API Reference</a>
+      <a href="setup.html">Setup Guide</a>
+    </nav>
+  </div>
+</nav>
+
+<main class="content">
+  <h2 style="margin-top:0">Setup Guide</h2>
+  <p>Follow these steps to prepare the repository for a training session.</p>
+
+  <h2>Prerequisites</h2>
+  <ul style="margin-left:20px; line-height:2">
+    <li>A GitHub account with <strong>Admin</strong> access to this repository</li>
+    <li>Git installed locally (<code>git --version</code>)</li>
+    <li>Node.js 20+ installed (<code>node --version</code>)</li>
+    <li>GitHub CLI installed (<code>gh --version</code>)</li>
+  </ul>
+
+  <h2>1 — Clone &amp; install</h2>
+  <pre><code>git clone https://github.com/&lt;org&gt;/training.git
+cd training
+npm install</code></pre>
+
+  <h2>2 — Run the app locally</h2>
+  <pre><code>npm start
+# → OctoTasks running on http://localhost:3000</code></pre>
+  <p>Open <a href="http://localhost:3000">http://localhost:3000</a> in your browser. You should see the task-manager UI with five seed tasks.</p>
+
+  <h2>3 — Run the test suite</h2>
+  <pre><code>npm test</code></pre>
+  <p>All 16 tests should pass and a <code>coverage/</code> folder is generated.</p>
+
+  <h2>4 — Enable GitHub Pages</h2>
+  <ol style="margin-left:20px; line-height:2.2">
+    <li>Go to <strong>Settings → Pages</strong> in this repository.</li>
+    <li>Under <em>Source</em>, select <strong>GitHub Actions</strong>.</li>
+    <li>Push any change to <code>docs/</code> — the <em>Deploy to GitHub Pages</em> workflow will run and publish the site.</li>
+  </ol>
+
+  <div class="alert">
+    The Pages URL will be <code>https://&lt;org&gt;.github.io/training/</code>. Share this with participants before the session.
+  </div>
+
+  <h2>5 — Seed training data (issues, PRs, project)</h2>
+  <p>A one-click workflow creates realistic issues and pull requests for the training demos.</p>
+  <ol style="margin-left:20px; line-height:2.2">
+    <li>Go to <strong>Actions → Setup Training Environment</strong>.</li>
+    <li>Click <strong>Run workflow</strong>.</li>
+    <li>Enter the cohort name (e.g. <em>Cohort 1</em>) and click <strong>Run workflow</strong>.</li>
+  </ol>
+  <p>The workflow will create:</p>
+  <ul style="margin-left:20px; line-height:2">
+    <li>4 <strong>closed issues</strong> (background history)</li>
+    <li>4 <strong>open issues</strong> (bugs and features to fix during training)</li>
+    <li>1 <strong>open pull request</strong> (feature in progress)</li>
+    <li>1 <strong>merged pull request</strong> (completed feature)</li>
+  </ul>
+
+  <h2>6 — Create a GitHub Project board</h2>
+  <ol style="margin-left:20px; line-height:2.2">
+    <li>Go to the <strong>Projects</strong> tab in this repository.</li>
+    <li>Click <strong>New project → Board</strong>.</li>
+    <li>Name it <em>OctoTasks Sprint 1</em>.</li>
+    <li>Add the open issues to the board under <em>To Do</em>.</li>
+  </ol>
+  <p>Walk participants through the board during Section 2 (Navigating GitHub).</p>
+
+  <h2>7 — Configure branch protection</h2>
+  <ol style="margin-left:20px; line-height:2.2">
+    <li>Go to <strong>Settings → Branches → Add branch ruleset</strong>.</li>
+    <li>Target the <code>main</code> branch.</li>
+    <li>Enable: <em>Require a pull request before merging</em> and <em>Require status checks to pass</em>.</li>
+    <li>Add the <code>Test</code> CI job as a required check.</li>
+  </ol>
+
+  <h2>8 — Set up the Wiki</h2>
+  <p>Wiki content is stored in the <code>wiki/</code> folder. To publish it:</p>
+  <pre><code># One-time: enable the Wiki in Settings → Features → Wikis
+git clone https://github.com/&lt;org&gt;/training.wiki.git /tmp/wiki
+cp wiki/*.md /tmp/wiki/
+cd /tmp/wiki
+git add . &amp;&amp; git commit -m "Add training wiki pages" &amp;&amp; git push</code></pre>
+
+  <div class="alert green">
+    <strong>You're ready!</strong> The repository now has seed issues, pull requests, CI checks, GitHub Pages, and a project board — everything needed for a productive 2-hour training session.
+  </div>
+
+</main>
+
+<footer class="footer">
+  OctoTasks · GitHub Developer Training
+</footer>
+
+</body>
+</html>

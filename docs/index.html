@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OctoTasks — GitHub Developer Training</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <span class="navbar-brand">
+      <svg width="20" height="20" viewBox="0 0 16 16">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      OctoTasks
+    </span>
+    <nav class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="api.html">API Reference</a>
+      <a href="setup.html">Setup Guide</a>
+    </nav>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>GitHub Developer Training</h1>
+  <p>A hands-on 2-hour workshop for developers migrating from Gerrit&nbsp;&amp;&nbsp;Jenkins to GitHub.</p>
+  <div class="hero-badges">
+    <span class="badge green">⏱ 2 hours</span>
+    <span class="badge purple">👥 ~100 developers</span>
+    <span class="badge blue">🚀 Beginner friendly</span>
+  </div>
+</section>
+
+<main class="content">
+
+  <h2>About This Training</h2>
+  <p>This course gets developers productive on GitHub as quickly as possible by pairing hands-on exercises with the <strong>OctoTasks</strong> web app — a simple task manager that participants browse, modify, and ship during the session.</p>
+
+  <div class="cards">
+    <div class="card">
+      <h3>📂 The App</h3>
+      <p>OctoTasks is a lightweight Node.js/Express task manager. Its source lives in <code>src/</code> and is simple enough to understand in minutes.</p>
+      <a class="card-link" href="../src/public/index.html">View App →</a>
+    </div>
+    <div class="card">
+      <h3>📖 Walkthroughs</h3>
+      <p>Step-by-step trainer guides for every section of the agenda are in the <code>walkthrough/</code> folder.</p>
+      <a class="card-link" href="../walkthrough/README.md">Open Walkthroughs →</a>
+    </div>
+    <div class="card">
+      <h3>⚙️ Setup</h3>
+      <p>Run the <em>Setup Training Environment</em> GitHub Actions workflow before the session to create seed issues, PRs, and a project board.</p>
+      <a class="card-link" href="setup.html">Setup Guide →</a>
+    </div>
+  </div>
+
+  <h2>Training Agenda</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Section</th>
+        <th>Topics</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0:00 – 0:10</td>
+        <td><strong>Welcome &amp; Objectives</strong></td>
+        <td>What changes from Gerrit → GitHub; what we'll build today</td>
+      </tr>
+      <tr>
+        <td>0:10 – 0:25</td>
+        <td><strong>Navigating GitHub</strong></td>
+        <td>UI tour; repositories, issues, PRs; code browsing; history</td>
+      </tr>
+      <tr>
+        <td>0:25 – 0:45</td>
+        <td><strong>Repository Basics</strong></td>
+        <td>Repo structure; commits, branches, PRs; Gerrit vs GitHub workflows</td>
+      </tr>
+      <tr>
+        <td>0:45 – 1:05</td>
+        <td><strong>GitHub Flow</strong></td>
+        <td>Branching strategy; PR lifecycle; reviews; merging</td>
+      </tr>
+      <tr>
+        <td>1:05 – 1:10</td>
+        <td><strong>GitHub Copilot &amp; AI</strong></td>
+        <td>Conceptual overview; code generation, refactoring, test creation</td>
+      </tr>
+      <tr>
+        <td>1:10 – 1:25</td>
+        <td><strong>GitHub Actions — Demo</strong></td>
+        <td>CI/CD concepts; workflow walkthrough; integration with PRs</td>
+      </tr>
+      <tr>
+        <td>1:25 – 1:40</td>
+        <td><strong>Putting It All Together</strong></td>
+        <td>End-to-end flow: code → PR → review → CI → merge</td>
+      </tr>
+      <tr>
+        <td>1:40 – 1:45</td>
+        <td><strong>Wrap-Up &amp; Next Steps</strong></td>
+        <td>Key takeaways; follow-up workshops; Q&amp;A</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Repository Structure</h2>
+  <pre><code>training/
+├── src/                  # OctoTasks web application
+│   ├── app.js            # Express server entry point
+│   ├── store.js          # In-memory task store
+│   ├── routes/tasks.js   # REST API routes
+│   └── public/           # Frontend (HTML / CSS / JS)
+├── tests/                # Jest test suite
+├── docs/                 # ◀ This site (GitHub Pages)
+├── walkthrough/          # Trainer step-by-step guides
+├── wiki/                 # Wiki page sources
+└── .github/
+    ├── workflows/
+    │   ├── ci.yml              # Lint + test on push/PR
+    │   ├── pages.yml           # Deploy docs/ to Pages
+    │   └── setup-training.yml  # Seed issues, PRs, project
+    ├── ISSUE_TEMPLATE/         # Bug &amp; feature templates
+    └── pull_request_template.md</code></pre>
+
+  <h2>Learning Outcomes</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>🔀 GitHub Flow</h3>
+      <p>Participants will confidently create branches, open pull requests, respond to review comments, and merge.</p>
+    </div>
+    <div class="card">
+      <h3>🤖 GitHub Actions</h3>
+      <p>Participants will understand how CI/CD pipelines are triggered and how checks gate merges.</p>
+    </div>
+    <div class="card">
+      <h3>🗂️ Project Management</h3>
+      <p>Participants will use Issues, a GitHub Project board, and labels to track work.</p>
+    </div>
+    <div class="card">
+      <h3>🔍 Code Review</h3>
+      <p>Participants will leave inline comments, suggest changes, and approve pull requests.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  OctoTasks · GitHub Developer Training · Built with GitHub Actions &amp; GitHub Pages
+</footer>
+
+</body>
+</html>
