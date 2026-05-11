@@ -2,6 +2,18 @@
 
 A side-by-side reference for developers migrating from Gerrit and Jenkins.
 
+## Mental model mapping
+
+If you remember one thing: in GitHub, the **pull request is the review object** and commits are just updates to that review.
+
+| If you used to think in… | Think in GitHub as… |
+|--------------------------|---------------------|
+| Change + patch sets | Pull request + commits |
+| Label votes (+2 / +1) | Review state (Approve / Request changes) |
+| Verified vote | Required status checks |
+| Submit queue | Merge button + branch protection |
+| OWNERS + submit rule | CODEOWNERS + required reviewers + checks |
+
 ## Core concepts
 
 | Concept | Gerrit | GitHub |
@@ -48,6 +60,14 @@ A side-by-side reference for developers migrating from Gerrit and Jenkins.
 | Shared libraries | Shared Library | Reusable workflows / Actions Marketplace |
 | Agent/runner | Jenkins agent | `runs-on: ubuntu-latest` (or self-hosted) |
 
+## Common migration pitfalls
+
+- **Waiting for patch set semantics:** pushing a new commit updates the same PR; you don't open a new PR for each review round.
+- **Assuming approval alone is enough:** required checks must pass before merge.
+- **Overusing force-push:** usually unnecessary during normal PR updates; add a follow-up commit unless your team prefers rebasing.
+- **Forgetting PR descriptions:** the PR body is often used for reviewer context, rollout notes, and issue auto-close (`Closes #123`).
+- **Expecting Jenkins job naming conventions:** in GitHub Actions, workflow/job names in `.github/workflows/*.yml` are the source of truth.
+
 ## Things that work differently
 
 ### No more Change-ID in commit messages
@@ -80,3 +100,29 @@ Gerrit supports stacked changes natively. In GitHub, the typical approach is:
 3. Merge A → main, then retarget B to `main`.
 
 Tools like [Graphite](https://graphite.dev) or the `gh` CLI can help automate this.
+
+## First-week checklist for former Gerrit users
+
+1. Open one docs-only PR and one code PR.
+2. Practice addressing comments via new commits on the same PR.
+3. Watch the required CI checks and wait for green before merge.
+4. Try both **Approve** and **Request changes** in a practice review.
+5. Merge a PR and confirm linked issue auto-closes.
+
+## FAQ
+
+### Do I need a Change-Id footer?
+
+No. GitHub does not use Gerrit Change-Id values.
+
+### Is force-push required when I update a PR?
+
+No. You can usually push another commit to the same branch.
+
+### What is closest to Verified +1?
+
+Passing required status checks on the PR.
+
+### Where do submit rules live?
+
+Typically in branch protection settings, CODEOWNERS, and workflow checks.

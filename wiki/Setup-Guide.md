@@ -2,6 +2,14 @@
 
 How to get OctoTasks running on your machine.
 
+## If you're coming from Gerrit/Jenkins
+
+This repository uses GitHub pull requests and GitHub Actions.
+
+- You will make changes on a branch, then open a PR for review.
+- CI checks appear on the PR timeline/checks tab.
+- Merges are controlled by repository rules and required checks.
+
 ## Prerequisites
 
 | Tool | Version | Check |
@@ -17,6 +25,8 @@ git clone https://github.com/<org>/training.git
 cd training
 npm install
 ```
+
+Tip: if you normally work with SSH remotes, you can switch origin after cloning.
 
 ## Run the app
 
@@ -53,6 +63,21 @@ npm run dev
 ```
 
 The server restarts automatically whenever you save a file.
+
+## Suggested first-pass workflow (for migration practice)
+
+1. Create a branch:
+
+```bash
+git checkout -b docs/my-first-github-pr
+```
+
+2. Edit a wiki source file under `wiki/`.
+3. Commit and push your branch.
+4. Open a pull request.
+5. Wait for CI checks to pass, then merge.
+
+After merge to `main`, wiki page updates are published automatically.
 
 ## Environment variables
 
@@ -106,3 +131,9 @@ nvm install 20 && nvm use 20
 The test suite imports the app module without starting the server (it uses
 `supertest`), so port conflicts should not occur. If you see this error,
 kill any running `npm start` process first.
+
+**I merged wiki changes but do not see updates on the GitHub Wiki**
+
+- Confirm the merge landed on `main`.
+- Check the **Sync GitHub Wiki** workflow run in the Actions tab.
+- Ensure the repository Wiki feature is enabled in settings.

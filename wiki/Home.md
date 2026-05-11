@@ -10,6 +10,21 @@ Welcome to the **OctoTasks** project wiki. These pages support the *GitHub for D
 | [Setup Guide](Setup-Guide) | How to run OctoTasks locally and prepare for training |
 | [Gerrit vs GitHub](Gerrit-vs-GitHub) | Side-by-side comparison of concepts and workflows |
 
+## Start here if you're coming from Gerrit
+
+If you're familiar with Gerrit patch sets, labels, and submit queues, read pages in this order:
+
+1. [Gerrit vs GitHub](Gerrit-vs-GitHub) — map old terms to new concepts.
+2. [GitHub Flow](GitHub-Flow) — see the end-to-end GitHub workflow.
+3. [Setup Guide](Setup-Guide) — get your local environment ready.
+
+Quick orientation:
+
+- **Gerrit Change** → **GitHub Pull Request**
+- **Patch set update** → **New commit pushed to PR branch**
+- **Code-Review +2 / Verified +1** → **PR approval + required status checks**
+- **Submit** → **Merge pull request**
+
 ## About OctoTasks
 
 OctoTasks is a lightweight task-manager web app built with Node.js and Express.  
