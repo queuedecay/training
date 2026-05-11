@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/queuedecay/training/actions/workflows/ci.yml/badge.svg)](https://github.com/queuedecay/training/actions/workflows/ci.yml)
 [![GitHub Pages](https://github.com/queuedecay/training/actions/workflows/pages.yml/badge.svg)](https://github.com/queuedecay/training/actions/workflows/pages.yml)
+[![Wiki Sync](https://github.com/queuedecay/training/actions/workflows/wiki-sync.yml/badge.svg)](https://github.com/queuedecay/training/actions/workflows/wiki-sync.yml)
 
 A **2-hour hands-on training course** for ~100 developers migrating from Gerrit and Jenkins to GitHub.
 
@@ -45,7 +46,7 @@ training/
 │   ├── 06-github-actions.md
 │   ├── 07-putting-it-together.md
 │   └── 08-wrap-up.md
-├── wiki/                       # Wiki page sources (push to .wiki repo)
+├── wiki/                       # Wiki page sources (synced to the GitHub Wiki)
 │   ├── Home.md
 │   ├── GitHub-Flow.md
 │   ├── Setup-Guide.md
@@ -101,8 +102,10 @@ npm run dev        # Dev server with auto-restart
 1. Run **Actions → Setup Training Environment** (workflow_dispatch) to seed issues, PRs, and a project board.
 2. Enable **GitHub Pages** (Settings → Pages → Source: GitHub Actions).
 3. Enable **branch protection** on `main` (require the `Test` CI job).
-4. Push wiki pages: `cp wiki/*.md /tmp/wiki && cd /tmp/wiki && git add . && git commit -m "init" && git push`.
+4. Enable the repository wiki in GitHub so the **Sync GitHub Wiki** workflow can publish `wiki/*.md` as individual wiki pages.
 5. Share the Pages URL with participants.
+
+Changes pushed to `wiki/*.md` on `main` are automatically published to the GitHub Wiki by `.github/workflows/wiki-sync.yml`.
 
 Full instructions: [`docs/setup.html`](docs/setup.html) or the [Setup Guide wiki page](../../wiki/Setup-Guide).
 

@@ -19,6 +19,8 @@ Source code: [`src/`](../tree/main/src)
 Docs site: see the project's GitHub Pages  
 Training walkthroughs: [`walkthrough/`](../tree/main/walkthrough)
 
+> These wiki pages are sourced from the repository's `wiki/` directory and are automatically synced to the GitHub Wiki.
+
 ---
 
 *Last updated by the Setup Training workflow. For changes, edit `wiki/*.md` in the main repo and re-run the setup workflow.*
