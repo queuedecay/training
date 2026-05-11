@@ -1,0 +1,58 @@
+name: Bug Report
+description: Report something that isn't working as expected
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill in as much detail as you can.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the bug.
+      placeholder: "When I click 'Add Task' with an empty title, the page crashes instead of showing a validation error."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce the issue?
+      placeholder: |
+        1. Open the app at http://localhost:3000
+        2. Leave the title field blank
+        3. Click "Add Task"
+        4. Observe the error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What should have happened instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical (app unusable)
+        - High (major feature broken)
+        - Medium (degraded experience)
+        - Low (cosmetic / minor)
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: "Browser, OS, Node.js version"
+      placeholder: "Chrome 124, macOS 14, Node 20"

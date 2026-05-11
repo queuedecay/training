@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference — OctoTasks</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <span class="navbar-brand">
+      <svg width="20" height="20" viewBox="0 0 16 16">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      OctoTasks
+    </span>
+    <nav class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="api.html">API Reference</a>
+      <a href="setup.html">Setup Guide</a>
+    </nav>
+  </div>
+</nav>
+
+<main class="content">
+  <h2 style="margin-top:0">API Reference</h2>
+
+  <p>OctoTasks exposes a JSON REST API at <code>/api/tasks</code>. All request and response bodies use <code>Content-Type: application/json</code>.</p>
+
+  <div class="alert">
+    This API is intentionally simple for training purposes. It uses an in-memory store — data resets when the server restarts.
+  </div>
+
+  <!-- Task model -->
+  <h2>Task Object</h2>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>integer</td><td>Auto-assigned unique identifier</td></tr>
+      <tr><td><code>title</code></td><td>string</td><td>Short title of the task (required)</td></tr>
+      <tr><td><code>description</code></td><td>string</td><td>Optional longer description</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td><code>todo</code> | <code>in-progress</code> | <code>done</code></td></tr>
+      <tr><td><code>createdAt</code></td><td>ISO 8601 string</td><td>Creation timestamp</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Endpoints -->
+  <h2>Endpoints</h2>
+
+  <h3>GET /api/tasks</h3>
+  <p>Returns all tasks. Optionally filter by status.</p>
+  <table>
+    <thead><tr><th>Query param</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>status</code></td><td>string</td><td>One of <code>todo</code>, <code>in-progress</code>, <code>done</code></td></tr>
+    </tbody>
+  </table>
+  <pre><code>GET /api/tasks?status=todo
+HTTP 200
+[
+  {
+    "id": 4,
+    "title": "Write API documentation",
+    "description": "Document all REST endpoints.",
+    "status": "todo",
+    "createdAt": "2024-01-18T00:00:00.000Z"
+  }
+]</code></pre>
+
+  <h3>GET /api/tasks/:id</h3>
+  <p>Returns a single task by its numeric ID.</p>
+  <pre><code>GET /api/tasks/1
+HTTP 200
+{
+  "id": 1,
+  "title": "Set up GitHub repository",
+  ...
+}</code></pre>
+  <p>Returns <code>404</code> if the task is not found.</p>
+
+  <h3>POST /api/tasks</h3>
+  <p>Creates a new task. New tasks default to <code>status: "todo"</code>.</p>
+  <table>
+    <thead><tr><th>Body field</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>title</code></td><td>✅ yes</td><td>Task title (max 120 chars)</td></tr>
+      <tr><td><code>description</code></td><td>no</td><td>Longer description (max 255 chars)</td></tr>
+    </tbody>
+  </table>
+  <pre><code>POST /api/tasks
+{ "title": "Review PR #42", "description": "Check the new search feature" }
+
+HTTP 201
+{
+  "id": 6,
+  "title": "Review PR #42",
+  "description": "Check the new search feature",
+  "status": "todo",
+  "createdAt": "2024-06-01T10:00:00.000Z"
+}</code></pre>
+  <p>Returns <code>400</code> when <code>title</code> is missing or blank.</p>
+
+  <h3>PATCH /api/tasks/:id</h3>
+  <p>Updates one or more fields of an existing task.</p>
+  <table>
+    <thead><tr><th>Body field</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>title</code></td><td>New title</td></tr>
+      <tr><td><code>description</code></td><td>New description</td></tr>
+      <tr><td><code>status</code></td><td><code>todo</code> | <code>in-progress</code> | <code>done</code></td></tr>
+    </tbody>
+  </table>
+  <pre><code>PATCH /api/tasks/3
+{ "status": "done" }
+
+HTTP 200
+{ "id": 3, "status": "done", ... }</code></pre>
+  <p>Returns <code>400</code> for an invalid status value, <code>404</code> if not found.</p>
+
+  <h3>DELETE /api/tasks/:id</h3>
+  <p>Permanently deletes a task.</p>
+  <pre><code>DELETE /api/tasks/3
+
+HTTP 204 No Content</code></pre>
+  <p>Returns <code>404</code> if the task does not exist.</p>
+
+  <h2>Health Check</h2>
+  <pre><code>GET /health
+
+HTTP 200
+{ "status": "ok", "app": "OctoTasks", "timestamp": "2024-06-01T10:00:00.000Z" }</code></pre>
+
+  <div class="alert green">
+    <strong>Training tip:</strong> Use the health check endpoint in the CI workflow to confirm the server started successfully before running integration tests.
+  </div>
+
+</main>
+
+<footer class="footer">
+  OctoTasks · GitHub Developer Training
+</footer>
+
+</body>
+</html>

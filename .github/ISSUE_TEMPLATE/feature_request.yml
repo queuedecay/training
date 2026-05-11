@@ -1,0 +1,50 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement! Please provide as much context as possible.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem does this feature solve?
+      placeholder: "As a developer, I can't see which tasks are overdue because there's no due-date support."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the feature you'd like to see.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How will we know this feature is done?
+      placeholder: |
+        - [ ] `dueDate` field stored in the task model
+        - [ ] API accepts and returns `dueDate`
+        - [ ] Overdue tasks highlighted in red in the UI
+        - [ ] Tests cover the new behaviour
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - High — blocks other work
+        - Medium — important but not urgent
+        - Low — nice to have
+    validations:
+      required: true

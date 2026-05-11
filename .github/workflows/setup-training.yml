@@ -1,0 +1,174 @@
+name: Setup Training Environment
+
+# Run this workflow once before each training session to populate
+# the repository with realistic issues, pull requests, and a project board.
+# Requires a fine-grained personal access token stored as PAT_TOKEN with
+# permissions: contents:write, issues:write, pull-requests:write, projects:write.
+
+on:
+  workflow_dispatch:
+    inputs:
+      cohort_name:
+        description: "Cohort / team name (used in project title)"
+        required: false
+        default: "Cohort 1"
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  setup:
+    name: Create training data
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Git identity ───────────────────────────────────────────
+      - name: Configure git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # ── Labels ────────────────────────────────────────────────
+      - name: Ensure labels exist
+        run: |
+          for label in "enhancement" "bug" "good first issue" "help wanted" "in review"; do
+            gh label create "$label" --force \
+              --color "$(python3 -c "import random,sys; print('%06x'%random.randrange(16**6))")" \
+              || true
+          done
+
+      # ── Closed issues (background history) ────────────────────
+      - name: Create closed issues
+        run: |
+          I1=$(gh issue create \
+            --title "chore: initialise Node.js project structure" \
+            --body $'## Summary\nSet up the initial Express app, ESLint, Jest, and the \`src/\` directory layout.\n\n## Acceptance criteria\n- [ ] \`npm start\` runs the server\n- [ ] \`npm test\` passes\n- [ ] \`npm run lint\` passes' \
+            --label "enhancement")
+          gh issue close "$I1" --comment "Done — merged in the initial commit."
+
+          I2=$(gh issue create \
+            --title "feat: add basic task CRUD API" \
+            --body $'## Summary\nImplement \`GET /api/tasks\`, \`POST\`, \`PATCH\`, and \`DELETE\` endpoints backed by an in-memory store.\n\n## Acceptance criteria\n- [ ] All four endpoints work\n- [ ] Validation returns 400 for bad input\n- [ ] 404 returned for unknown IDs' \
+            --label "enhancement")
+          gh issue close "$I2" --comment "Closed — all CRUD endpoints are live."
+
+          I3=$(gh issue create \
+            --title "style: create initial CSS for the task-manager UI" \
+            --body $'## Summary\nAdd \`style.css\` so the app looks presentable during demos.' \
+            --label "enhancement")
+          gh issue close "$I3" --comment "Merged — UI looks great."
+
+          I4=$(gh issue create \
+            --title "ci: configure ESLint and Jest in CI pipeline" \
+            --body $'## Summary\nAdd \`.github/workflows/ci.yml\` that runs lint and tests on every push and PR.' \
+            --label "enhancement")
+          gh issue close "$I4" --comment "CI is running."
+
+      # ── Open issues ───────────────────────────────────────────
+      - name: Create open issues
+        run: |
+          gh issue create \
+            --title "feat: add task priority levels (high / medium / low)" \
+            --body $'## Summary\nUsers need a way to mark tasks as high, medium, or low priority.\n\n## Proposed solution\nAdd a \`priority\` field to the task model and a colour-coded badge in the UI.\n\n## Acceptance criteria\n- [ ] \`priority\` field in POST/PATCH body\n- [ ] UI badge shows priority level\n- [ ] Filter by priority works' \
+            --label "enhancement"
+
+          gh issue create \
+            --title "bug: task description wraps incorrectly on narrow viewports" \
+            --body $'## Steps to reproduce\n1. Open the app on a 375 px screen\n2. Add a task with a long description\n3. Description overflows the card\n\n## Expected behaviour\nDescription wraps cleanly inside the card.\n\n## Environment\n- Browser: Chrome 124\n- Viewport: 375 × 812' \
+            --label "bug"
+
+          gh issue create \
+            --title "feat: add due-date support to tasks" \
+            --body $'## Summary\nTeams want to track deadlines. Add an optional \`dueDate\` field (ISO 8601 date string) to tasks.\n\n## Acceptance criteria\n- [ ] \`dueDate\` stored and returned by API\n- [ ] Overdue tasks highlighted in the UI' \
+            --label "enhancement"
+
+          gh issue create \
+            --title "feat: implement full-text task search" \
+            --body $'## Summary\nAs the task list grows it becomes hard to find items. Add a search bar that filters tasks by title and description client-side.' \
+            --label "enhancement" \
+            --label "good first issue"
+
+      # ── Feature branch for the open PR ────────────────────────
+      - name: Create feature/add-task-priority branch
+        run: |
+          git checkout -b feature/add-task-priority
+
+          # Extend the store with a priority field
+          cat >> src/store.js << 'JS'
+
+// Priority support (work in progress — see open PR)
+TaskStore.prototype.setPriority = function (id, priority) {
+  const task = this.getById(id);
+  if (!task) return null;
+  task.priority = priority;
+  return task;
+};
+JS
+
+          git add src/store.js
+          git commit -m "wip: scaffold priority support on TaskStore"
+          git push origin feature/add-task-priority
+
+      # ── Open pull request ──────────────────────────────────────
+      - name: Create open pull request
+        run: |
+          gh pr create \
+            --title "feat: add task priority levels" \
+            --body $'## What & why\nCloses #5 (the open priority issue).\n\nAdds a `priority` field (high / medium / low) to the task model so teams can distinguish urgent from routine work.\n\n## Changes\n- `src/store.js` – `setPriority()` helper scaffolded\n- Next steps: wire route + UI badge\n\n## Checklist\n- [x] Branch created from main\n- [ ] Route handler added\n- [ ] UI badge added\n- [ ] Tests written\n- [ ] Lint passes' \
+            --base main \
+            --head feature/add-task-priority \
+            --label "enhancement" \
+            --label "in review"
+
+      # ── Feature branch for the merged PR ──────────────────────
+      - name: Create feature/add-task-search branch and merge it
+        run: |
+          git checkout main
+          git checkout -b feature/add-task-search
+
+          # Add a search route
+          node - << 'NODE'
+          const fs = require('fs');
+          const file = 'src/routes/tasks.js';
+          let src = fs.readFileSync(file, 'utf8');
+          const searchRoute = `
+// GET /api/tasks/search?q=<term>
+router.get('/search', (req, res) => {
+  const q = (req.query.q || '').toLowerCase();
+  const results = store.getAll().filter(
+    t => t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
+  );
+  res.json(results);
+});
+`;
+          // Insert before the first 'module.exports'
+          src = src.replace('module.exports = router;', searchRoute + '\nmodule.exports = router;');
+          fs.writeFileSync(file, src);
+NODE
+
+          git add src/routes/tasks.js
+          git commit -m "feat: add GET /api/tasks/search endpoint"
+          git push origin feature/add-task-search
+
+          PR_URL=$(gh pr create \
+            --title "feat: add full-text task search endpoint" \
+            --body $'## What & why\nCloses #8 (task-search issue).\n\nAdds `GET /api/tasks/search?q=<term>` so clients can search tasks by title or description.\n\n## Checklist\n- [x] Route added\n- [x] Manual test passes\n- [x] Lint passes' \
+            --base main \
+            --head feature/add-task-search \
+            --label "enhancement")
+
+          gh pr merge "$PR_URL" --merge --delete-branch \
+            --body "LGTM! Merging to main."
+
+      - name: Return to main
+        run: git checkout main

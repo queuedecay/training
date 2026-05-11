@@ -1,0 +1,10 @@
+# Owners
+
+# Default owners for everything in the repo
+*   @queuedecay
+
+# Source code
+src/   @queuedecay
+
+# CI/CD workflows — require extra scrutiny
+.github/workflows/   @queuedecay
