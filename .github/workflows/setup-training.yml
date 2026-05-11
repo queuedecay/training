@@ -106,14 +106,14 @@ jobs:
           # Extend the store with a priority field
           cat >> src/store.js << 'JS'
 
-// Priority support (work in progress — see open PR)
-TaskStore.prototype.setPriority = function (id, priority) {
-  const task = this.getById(id);
-  if (!task) return null;
-  task.priority = priority;
-  return task;
-};
-JS
+          // Priority support (work in progress — see open PR)
+          TaskStore.prototype.setPriority = function (id, priority) {
+            const task = this.getById(id);
+            if (!task) return null;
+            task.priority = priority;
+            return task;
+          };
+          JS
 
           git add src/store.js
           git commit -m "wip: scaffold priority support on TaskStore"
@@ -142,19 +142,19 @@ JS
           const file = 'src/routes/tasks.js';
           let src = fs.readFileSync(file, 'utf8');
           const searchRoute = `
-// GET /api/tasks/search?q=<term>
-router.get('/search', (req, res) => {
-  const q = (req.query.q || '').toLowerCase();
-  const results = store.getAll().filter(
-    t => t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
-  );
-  res.json(results);
-});
-`;
+          // GET /api/tasks/search?q=<term>
+          router.get('/search', (req, res) => {
+            const q = (req.query.q || '').toLowerCase();
+            const results = store.getAll().filter(
+              t => t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
+            );
+            res.json(results);
+          });
+          `;
           // Insert before the first 'module.exports'
           src = src.replace('module.exports = router;', searchRoute + '\nmodule.exports = router;');
           fs.writeFileSync(file, src);
-NODE
+          NODE
 
           git add src/routes/tasks.js
           git commit -m "feat: add GET /api/tasks/search endpoint"
