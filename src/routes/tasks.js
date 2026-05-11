@@ -51,4 +51,14 @@ router.delete('/:id', (req, res) => {
   res.status(204).send();
 });
 
+
+// GET /api/tasks/search?q=<term>
+router.get('/search', (req, res) => {
+  const q = (req.query.q || '').toLowerCase();
+  const results = store.getAll().filter(
+    t => t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
+  );
+  res.json(results);
+});
+
 module.exports = router;
