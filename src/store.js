@@ -96,3 +96,11 @@ class TaskStore {
 const store = new TaskStore();
 
 module.exports = { TaskStore, store };
+
+// Priority support (work in progress — see open PR)
+TaskStore.prototype.setPriority = function (id, priority) {
+  const task = this.getById(id);
+  if (!task) return null;
+  task.priority = priority;
+  return task;
+};
