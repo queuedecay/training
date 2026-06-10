@@ -12,7 +12,7 @@
   "keywords": ["github", "training", "tasks"],
   "license": "MIT",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.22.2"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
